@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D OSM Buildings with Leaflet</title>
+  <title>Tartu Map</title>
 
   <!-- Latest Leaflet -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
@@ -16,7 +16,7 @@
 
   <style>
     html, body { height: 100%; margin: 0; }
-    .leaflet-container { height: 70%; width: 70%; margin-left: 300px; }
+    .leaflet-container { height: 70%; width: 70%; margin-left: 300px; margin-top: 20px;}
     .controls {
       position: absolute;
       top: 10px;
@@ -42,10 +42,14 @@
       padding-left: 15px;
       margin-top: 5px;
     }
-    .child-layers label {
-      display: block;
-      cursor: pointer;
-    }
+	.child-layers label {
+	  display: flex;       /* Aligns checkbox and icon properly */
+	  align-items: center; /* Centers items vertically */
+	  gap: 8px;            /* Adds space between checkbox and icon */
+	  margin-bottom: 6px;  /* Increases vertical spacing between rows */
+	  line-height: 1;    /* Adjusts line height for better readability */
+	}
+
 	
 
 
@@ -67,12 +71,13 @@
 		width: 20px;
 		height: 20px;
 		margin-right: 10px;
-		border: 1px solid #000;
+		
 	}
 
 	.tartu-university { background: #e60092; }
 	.student-residences { background: #4d4dff; }
 	.park { background: #0a783b; }
+
 
 
 
@@ -132,61 +137,189 @@
 </head>
 <body>
   <div id="map"></div>
-  <div class="controls">
-    <div class="parent-header" onclick="toggleSection('exciseLayers')">Excise +</div>
-    <div id="exciseLayers" class="child-layers">
-      <label><input type="checkbox" onclick="toggleLayer(utGymLayer)"> University Gym</label>
-      <label><input type="checkbox" onclick="toggleLayer(outDoorGymLayer)"> Outdoor Gym</label>
-	  <label><input type="checkbox" onclick="toggleLayer(sportParkLayer)"> SportPark</label>
 
-    </div>
+<div class="controls">  
+  <div class="parent-header" onclick="toggleSection('exciseLayers')">Exercise +</div>
+  <div id="exciseLayers" class="child-layers">
+    <label>
+      <input type="checkbox" onclick="toggleLayer(utGymLayer)">
+      <span style="background-color: red; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-dumbbell"></i>
+      </span> &nbsp;University Gym
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(outDoorGymLayer)">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-dumbbell"></i>
+      </span> &nbsp;Outdoor Gym
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(sportParkLayer)">
+      <span style="background-color: blue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-dumbbell"></i>
+      </span> &nbsp;Sport Park
+    </label>
+  </div>
 
+  <div class="parent-header" onclick="toggleSection('studyLayers')">Study Areas +</div>
+  <div id="studyLayers" class="child-layers">
+    <label>
+      <input type="checkbox" onclick="toggleLayer(utLibraryLayer)">
+      <span style="background-color: darkred; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-book"></i>
+      </span> &nbsp;University Library
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(libraryLayer)">
+      <span style="background-color: orange; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-book"></i>
+      </span> &nbsp;Library
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(utStudyAreasLayer)">
+      <span style="background-color: darkgreen; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-book-open-reader"></i>
+      </span> &nbsp;Student Lounges
+    </label>
+  </div>
 
-    <div class="parent-header" onclick="toggleSection('studyLayers')">Study Areas +</div>
-    <div id="studyLayers" class="child-layers">
-      <label><input type="checkbox" onclick="toggleLayer(utLibraryLayer)"> University Library</label>
-      <label><input type="checkbox" onclick="toggleLayer(libraryLayer)"> Library</label>
-      <label><input type="checkbox" onclick="toggleLayer(utStudyAreasLayer)"> Student Lounges</label>
-    </div>
+  <div class="parent-header" onclick="toggleSection('eatingLayers')">Eating Areas +</div>
+  <div id="eatingLayers" class="child-layers">
+    <label>
+      <input type="checkbox" onclick="toggleLayer(microwavesLayer)">
+      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-ticket"></i>
+      </span> &nbsp;Student Breakroom
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(RüütliStreetLayer)">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-martini-glass"></i>
+      </span> &nbsp;Rüütli Street
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(foodSharingLayer)">
+      <span style="background-color: blue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-burger"></i>
+      </span> &nbsp;Food Sharing
+    </label>
+  </div>
 
-    <div class="parent-header" onclick="toggleSection('eatingLayers')">Eating Areas +</div>
-    <div id="eatingLayers" class="child-layers">
-      <label><input type="checkbox" onclick="toggleLayer(microwavesLayer)"> Student Breakroom</label>
-	  <label><input type="checkbox" onclick="toggleLayer(RüütliStreetLayer)"> Rüütli Street</label>
-      <label><input type="checkbox" onclick="toggleLayer(foodSharingLayer)"> Food Sharing</label>
-	  
-    </div>
-	
-	
-	<div class="parent-header" onclick="toggleSection('cultureLayers')">Cultures +</div>
-    <div id="cultureLayers" class="child-layers">
-      <label><input type="checkbox" onclick="toggleLayer(utMuseumLayer)"> University Museum</label>
-      <label><input type="checkbox" onclick="toggleLayer(museumLayer)"> Museum</label>
-	  <label><input type="checkbox" onclick="toggleLayer(AparaaditehasCulturalCenterLayer)"> Aparaaditehas Cultural Center</label>
+  <div class="parent-header" onclick="toggleSection('cultureLayers')">Cultures +</div>
+  <div id="cultureLayers" class="child-layers">
+    <label>
+      <input type="checkbox" onclick="toggleLayer(utMuseumLayer)">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-landmark"></i>
+      </span> &nbsp;University Museum
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(museumLayer)">
+      <span style="background-color: purple; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-landmark"></i>
+      </span> &nbsp;Museum
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(AparaaditehasCulturalCenterLayer)">
+      <span style="background-color: darkmagenta; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-people-group"></i>
+      </span> &nbsp;Aparaaditehas Cultural Center
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(nationalArchiveLayer)">
+      <span style="background-color: cadetblue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-archive"></i>
+      </span> &nbsp;National Archives of Estonia
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(apolloCinemaLayer)">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-film"></i>
+      </span> &nbsp;Apollo Cinema
+    </label>
 
-	  <label><input type="checkbox" onclick="toggleLayer(nationalArchiveLayer)"> National Archives of Estonia</label>
-	  
-	  <!-- <label><input type="checkbox" onclick="toggleLayer(exhibitionLayer)"> Exhibitation</label> -->
-    </div>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(tartuElektriteaterLayer)">
+      <span style="background-color: blue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-masks-theater"></i>
+      </span> &nbsp;Tartu Elektriteater
+    </label>
 	
 	
-	<div class="parent-header" onclick="toggleSection('mentalHealthLayers')">Mental Health +</div>
-    <div id="mentalHealthLayers" class="child-layers">
-	  <label><input type="checkbox" onclick="toggleLayer(utCounsellingCentreLayer)"> UT Counselling Centre</label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(pallasGalleryLayer)">
+      <span style="background-color: orange; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-studiovinari"></i>
+      </span> &nbsp;Pallas Gallery
+    </label>
+	
+	
+    <label>
+      <input type="checkbox" onclick="toggleLayer(artUnionLayer)">
+      <span style="background-color: red; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-palette"></i>
+      </span> &nbsp;Tartu Art Union
+    </label>
 
-      <label><input type="checkbox" onclick="toggleLayer(hospitalLayer)"> Hospital</label>
-      <label><input type="checkbox" onclick="toggleLayer(privateCounsellingLayer)"> Private Counselling Centres/Clinics</label>
-    </div>
-	
-	
-	
-	
-		<button onclick="resetView()">Default</button>
-
-	
 	
   </div>
   
+  
+  
+  
+  
+
+  <div class="parent-header" onclick="toggleSection('mentalHealthLayers')">Health +</div>
+  <div id="mentalHealthLayers" class="child-layers">
+    <label>
+      <input type="checkbox" onclick="toggleLayer(hospitalLayer)">
+      <span style="background-color: red; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-hospital"></i>
+      </span> &nbsp;Hospital
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(privateCounsellingLayer)">
+      <span style="background-color: orange; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-hospital"></i>
+      </span> &nbsp;Private Counselling Centres/Clinics
+    </label>
+    <label>
+      <input type="checkbox" onclick="toggleLayer(utCounsellingCentreLayer)">
+      <span style="background-color: green; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-circle-info"></i>
+      </span> &nbsp;UT Counselling Center
+    </label>
+	
+    <label>
+      <input type="checkbox" onclick="toggleLayer(EMO_GeoJSONLayer)">
+      <span style="background-color: purple; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-truck-medical"></i>
+      </span> &nbsp;Emergency Care/EMO
+    </label>	
+	
+	
+	
+	
+	
+	
+    <label>
+      <input type="checkbox" onclick="toggleLayer(emergence_dentalLayer)">
+      <span style="background-color: blue; color: white; border-radius: 2px; padding: 3px 3px;">
+        <i class="fas fa-tooth"></i>
+      </span> &nbsp;Emergence Dental Care
+    </label>	
+	
+	
+	
+	
+	
+	
+  </div>
+
+  <button onclick="resetView()" style="margin-top: 10px;">Default</button>
+</div>
+
+
   
   
   
@@ -256,6 +389,38 @@
                 <p class="lounge-caption">Biomedicum Building</p>
             </div>	
 			
+
+
+													            <div class="lounge-item">
+                <img src="https://i.postimg.cc/yNGK06YQ/phycology-Kitchen.jpg" alt="Lounge 11">
+                <p class="lounge-caption">Näituse 2 Study Building</p>
+            </div>	
+			
+			
+			
+																            <div class="lounge-item">
+                <img src="https://i.postimg.cc/9QVQffry/delta.jpg" alt="Lounge 12">
+                <p class="lounge-caption">Delta Building</p>
+            </div>	
+			
+			
+
+
+
+													            <div class="lounge-item">
+                <img src="https://i.postimg.cc/Hs1pSL0F/Omicum-Study-Area.jpg" alt="Lounge 13">
+                <p class="lounge-caption">Omicum Building</p>
+            </div>	
+			
+			
+			
+																            <div class="lounge-item">
+                <img src="https://i.postimg.cc/Qxgjvr0C/ut-Library.jpg" alt="Lounge 14">
+                <p class="lounge-caption">UT Library</p>
+            </div>	
+						
+
+
 			
 			
         </div>
@@ -266,7 +431,7 @@
 
 
   <script>
-    var map = new L.Map('map').setView([58.380628, 26.725248], 16);
+    var map = new L.Map('map').setView([58.380628, 26.725248], 13);
     L.tileLayer('https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
       maxZoom: 18,
@@ -292,13 +457,30 @@
 				<div class="legend-color student-residences"></div>
 				<span>Student Residences</span>
 			</div>
+
+			<div class="legend-item">
+				<i class="fa fa-shield-halved" style="color: white; background: darkblue; width: 24px; height: 24px; 
+					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
+				<span style="margin-left: 5px;">  Politsei- ja Piirivalveamet</span>
+			</div>
+
+			<div class="legend-item">
+				<i class="fa fa-door-open" style="color: white; background: red; width: 24px; height: 24px; 
+					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
+				<span style="margin-left: 5px;">  Tartu Welcome Centre</span>
+			</div>
+
 			<div class="legend-item">
 				<div class="legend-color park"></div>
 				<span>Park</span>
 			</div>
+
+
+
 		`;
 		return div;
 	};
+
 
 
 	// Add legend to the map
@@ -338,7 +520,9 @@
 		let allLayers = [
 		  utGymLayer, outDoorGymLayer, sportParkLayer, utLibraryLayer, libraryLayer, utStudyAreasLayer,
 		  microwavesLayer, RüütliStreetLayer, foodSharingLayer, museumLayer, utMuseumLayer,
-		  AparaaditehasCulturalCenterLayer, nationalArchiveLayer, hospitalLayer, privateCounsellingLayer
+		  AparaaditehasCulturalCenterLayer, nationalArchiveLayer, hospitalLayer, privateCounsellingLayer, 
+		  EMO_GeoJSONLayer, emergence_dentalLayer, artUnionLayer, pallasGalleryLayer, tartuElektriteaterLayer,
+		  apolloCinemaLayer, utCounsellingCentreLayer
 		];
 
 		allLayers.forEach(layer => {
@@ -348,7 +532,7 @@
 		});
 
 		// Reset map view
-		map.setView([58.380628, 26.725248], 16);
+		map.setView([58.380628, 26.725248], 13);
 	  }
 	 
 
@@ -394,6 +578,13 @@
 
 
 
+	var json_policeStation_GeoJSON = {"type":"FeatureCollection","name":"policeStation","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"1","id":"1","Name":"Politsei- ja Piirivalveamet", "Address":"Riia tn 132"},"geometry":{"type":"Point","coordinates":[26.687800967360182,58.359599949486153]}}]};
+
+
+
+	var json_tartuWelcomeCentre_GeoJSON = {"type":"FeatureCollection","name":"tartuWelcomeCentre_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Tartu Welcome Centre", "Address":"Ülikooli tn 17"},"geometry":{"type":"Point","coordinates":[26.720760262251979,58.381324907733401]}}]};
 
 
 
@@ -498,6 +689,38 @@
 	
 	
 	
+	
+	const policeStationLayer = L.geoJson(json_policeStation_GeoJSON, { 
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {
+				icon: L.AwesomeMarkers.icon({
+					icon: 'shield-halved',  // FontAwesome police shield icon
+					markerColor: 'darkblue', // Dark blue marker for police
+					prefix: 'fa',
+					iconColor: 'white'
+				})
+			}).bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address || 'No address available'}`);
+		}
+	});  
+	policeStationLayer.addTo(map);  
+
+
+	const tartuWelcomeCentreLayer = L.geoJson(json_tartuWelcomeCentre_GeoJSON, { 
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {
+				icon: L.AwesomeMarkers.icon({
+					icon: 'door-open',  // FontAwesome info icon
+					markerColor: 'red', // Red marker for welcome centre
+					prefix: 'fa',
+					iconColor: 'white'
+				})
+			}).bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address || 'No address available'}`);
+		}
+	});  
+	tartuWelcomeCentreLayer.addTo(map);
+
+
+
 
 
 
@@ -567,6 +790,8 @@
 					{"type":"Feature","properties":{"id":"7","Address":"Jakobi 2", "Name":"Jakobi 2 Study Building Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.719719942316267,58.380500007864292]}},
 					{"type":"Feature","properties":{"id":"8","Address":"Jakobi 5", "Name":"Jakobi 5 Study Building Student Lounge"},"geometry":{"type":"Point","coordinates":[26.718373328821304,58.382095182689277]}},
 					{"type":"Feature","properties":{"id":"10", "Address":"Vanemuise tn 46","Name":"Vanemuise 46 Study Building Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.715708215063685,58.373247552053201]}},
+					{"type":"Feature","properties":{"id":"11", "Address":"Riia tn 23","Name":"Riia 23 Omicum Breakroom"},"geometry":{"type":"Point","coordinates":[26.71781053376524,58.372875118565304]}},
+					{"type":"Feature","properties":{"id":"12", "Address":"Näituse tn 2","Name":"Näituse 2 Study Building Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.711798118556004, 58.379518408619866]}},
 					{"type":"Feature","properties":{"id":"9","Address":"Narva mnt 18","Name":"Delta Center Student Breakroom"},"geometry":{"type":"Point","coordinates":[26.725280579872003,58.385248145011751]}}]}
 
 
@@ -596,6 +821,32 @@
     };
 
 
+	const json_apollo_cinema_0_GeoJSON = {"type":"FeatureCollection","name":"apollo_cinema_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+		[{"type":"Feature","properties":{"fid":"4","id":"4","Name":"Apollo Kino Tasku", "Address":"Turu tn 2"},"geometry":{"type":"Point","coordinates":[26.728897368166198,58.376933737241089]}},
+		{"type":"Feature","properties":{"fid":"5","id":"5","Name":"Apollo Kino Eeden", "Address":"Kalda tee 1C"},"geometry":{"type":"Point","coordinates":[26.750168021116384,58.373191181462659]}},
+		{"type":"Feature","properties":{"fid":"6","id":"6","Name":"Apollo Cinema Lõunakeskus", "Address":"Ringtee tn 75"},"geometry":{"type":"Point","coordinates":[26.675988803938441,58.358065084553971]}}]};
+
+
+
+
+	const json_Tartu_Elektriteater_GeoJSON = 
+	{"type":"FeatureCollection","name":"Tartu_Elektriteater_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"3","id":"3","Name":"Tartu Elektriteater", "Address":"Jakobi tn 1"},"geometry":{"type":"Point","coordinates":[26.719101488513921,58.381022384942206]}}]};
+
+
+	const json_Pallas_Gallery_Exhibitions_GeoJSON = 
+	{"type":"FeatureCollection","name":"pallas_Exhibitation","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"7","id":"7","Name":"Pallas Gallery and Exhibitions", "Address":"Riia tn 11"},"geometry":{"type":"Point","coordinates":[26.722447660844132,58.3742581259132]}}]};
+
+
+
+	const json_Kunstmaja_GeoJSON = 
+	{"type":"FeatureCollection","name":"publicServicePlaces_1public_Service_places_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"8","id":"8","Name":"Tartu Kunstmaja/Tartu Art Union", "Address":"Vanemuise tn 26"},"geometry":{"type":"Point","coordinates":[26.720145729779727,58.375092195606065]}}]};
+
+
+
+
 
 	const json_ut_counselling_centerut_counselling_0 = {"type":"FeatureCollection","name":"ut_counselling_centerut_counselling_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"fid":"5","ads_lahiaa":"W. Struve tn 1","type_tt":"University Building with Library","Address":"W. Struve tn 1","Name":"UT Counselling Centre"},"geometry":{"type":"Point","coordinates":[26.721430, 58.376665]}}]}
 
@@ -608,7 +859,7 @@
         {
           "type": "Feature",
           "properties": { "Name": "Tartu University Hospital", "Address": "L. Puusepa tn 8" },
-          "geometry": { "type": "Point", "coordinates": [26.700222185535026, 58.369472078552469] }
+          "geometry": { "type": "Point", "coordinates": [26.700222185535026, 58.369472078552469]}
         }
       ]
     };
@@ -616,6 +867,14 @@
 	const private_counsellingsGeoJSON = {"type":"FeatureCollection","name":"private_counsellings_5","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":[{"type":"Feature","properties":{"fid":"1","ads_lahiaa":"Riia tn 15b","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Riia tn 15b","Name":"Eesti Pereteraapia Keskus (Family consultations, Family therapy training center )"},"geometry":{"type":"Point","coordinates":[26.719892117000914,58.373252401924333]}},{"type":"Feature","properties":{"fid":"3","ads_lahiaa":"Jaama tn 71","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Jaama tn 71","Name":"Cognitive Behavioral Therapy Center"},"geometry":{"type":"Point","coordinates":[26.740618219191973,58.383571690506898]}},{"type":"Feature","properties":{"fid":"4","ads_lahiaa":"Vaksali tn 17","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Vaksali tn 17","Name":"Tartu University Hospital Sexual Health Center"},"geometry":{"type":"Point","coordinates":[26.709879043610776,58.372605581943333]}},{"type":"Feature","properties":{"fid":"7","ads_lahiaa":"Tähe tn 95","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Tähe tn 95","Name":"ProVida Kliinik"},"geometry":{"type":"Point","coordinates":[26.729813786545968,58.361623423081596]}},{"type":"Feature","properties":{"fid":"8","ads_lahiaa":"Lääneringtee 39","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Lääneringtee 39","Name":"Sexual health counseling center"},"geometry":{"type":"Point","coordinates":[26.677893682951112,58.359511413315403]}},{"type":"Feature","properties":{"fid":"9","ads_lahiaa":"Vaksali tn 6","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Vaksali tn 6","Name":"NGO Consciousness Laboratory in Tartu"},"geometry":{"type":"Point","coordinates":[26.706721892590572,58.373769817132256]}},{"type":"Feature","properties":{"fid":"10","ads_lahiaa":"Kastani tn 42","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Kastani tn 42","Name":"Psychotherapist Katri Lamesoo"},"geometry":{"type":"Point","coordinates":[26.715989895176648,58.370545453598353]}},{"type":"Feature","properties":{"fid":"11","ads_lahiaa":"Raatuse tn 21","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Raatuse tn 21","Name":"Confido Tartu"},"geometry":{"type":"Point","coordinates":[26.731003123524857,58.381659192275954]}},{"type":"Feature","properties":{"fid":"12","ads_lahiaa":"Raatuse tn 21","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Raatuse tn 21","Name":"Tartu City Polyclinic"},"geometry":{"type":"Point","coordinates":[26.731003123524857,58.381659192275954]}},{"type":"Feature","properties":{"fid":"14","ads_lahiaa":"Teguri tn 37b","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Teguri tn 37b","Name":"AJK mental health clinics"},"geometry":{"type":"Point","coordinates":[26.732838562400907,58.358257935565135]}},{"type":"Feature","properties":{"fid":"15","ads_lahiaa":"Kivi tn 23","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Kivi tn 23","Name":"E.G.U. Erapraksis"},"geometry":{"type":"Point","coordinates":[26.730755376747503,58.382977490188203]}},{"type":"Feature","properties":{"fid":"16","ads_lahiaa":"Sangla tn 63","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Sangla tn 63","Name":"Elite Clinic"},"geometry":{"type":"Point","coordinates":[26.684429098107536,58.370230781046637]}},{"type":"Feature","properties":{"fid":"17","ads_lahiaa":"Riia tn 132","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Riia tn 132","Name":"Victim assistance in Tartu County"},"geometry":{"type":"Point","coordinates":[26.687810000810941,58.35960573738361]}},{"type":"Feature","properties":{"fid":"18","ads_lahiaa":"Tähtvere tn 4","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Tähtvere tn 4","Name":"Gestalt psychotherapist Helen Kaljuvee-Sepp"},"geometry":{"type":"Point","coordinates":[26.71354322346307,58.382966956778787]}},{"type":"Feature","properties":{"fid":"19","ads_lahiaa":"Raja tn 31","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Raja tn 31","Name":"Tartu University Hospital\nPsychiatric clinic"},"geometry":{"type":"Point","coordinates":[26.681332539970022,58.36327839573827]}},{"type":"Feature","properties":{"fid":"20","ads_lahiaa":"Kalevi tn 103a","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Kalevi tn 103a","Name":"Psychologist and career coach Imbi Jaks in Tartu"},"geometry":{"type":"Point","coordinates":[26.734064969058267,58.365238382397322]}},{"type":"Feature","properties":{"fid":"21","ads_lahiaa":"Ilmatsalu tn 5","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Ilmatsalu tn 5","Name":"Music Therapy Clinic"},"geometry":{"type":"Point","coordinates":[26.689421526215011,58.377430885740559]}},{"type":"Feature","properties":{"fid":"22","ads_lahiaa":"Soola tn 2","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Soola tn 2","Name":"Dorpat Tervis"},"geometry":{"type":"Point","coordinates":[26.727715043751306,58.375976281144062]}},{"type":"Feature","properties":{"fid":"23","ads_lahiaa":"Aleksandri tn 8","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Aleksandri tn 8","Name":"Children's Health School"},"geometry":{"type":"Point","coordinates":[26.730672264890387,58.375806732910867]}},{"type":"Feature","properties":{"fid":"24","ads_lahiaa":"Vaksali tn 14","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Vaksali tn 14","Name":"Tartu Counseling and Crisis Assistance Center"},"geometry":{"type":"Point","coordinates":[26.704516919311743,58.375400748640203]}},{"type":"Feature","properties":{"fid":"25","ads_lahiaa":"Riia tn 13","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Riia tn 13","Name":"A-CLINIC"},"geometry":{"type":"Point","coordinates":[26.721243028798384,58.373756350713606]}},{"type":"Feature","properties":{"fid":"26","ads_lahiaa":"Riia tn 128/1","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Riia tn 128/1","Name":"ProVida Clinic"},"geometry":{"type":"Point","coordinates":[26.689883701509217,58.360192036309471]}},{"type":"Feature","properties":{"fid":"27","ads_lahiaa":"Vanemuise tn 8","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Vanemuise tn 8","Name":"Parem Pere (Better Family)"},"geometry":{"type":"Point","coordinates":[26.722828294508727,58.376252551380269]}},{"type":"Feature","properties":{"fid":"28","ads_lahiaa":"Sõbra tn 56","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Sõbra tn 56","Name":"TST Centrum"},"geometry":{"type":"Point","coordinates":[26.742841403665686,58.365136283488397]}},{"type":"Feature","properties":{"fid":"29","ads_lahiaa":"Vaksali tn 17a","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Vaksali tn 17a","Name":"Activitas"},"geometry":{"type":"Point","coordinates":[26.709551498271331,58.372958725894648]}},{"type":"Feature","properties":{"fid":"30","ads_lahiaa":"Kaunase pst 11","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Kaunase pst 11","Name":"NGO Tartu Children's Support Centre"},"geometry":{"type":"Point","coordinates":[26.766538190529367,58.374108119663632]}},{"type":"Feature","properties":{"fid":"31","ads_lahiaa":"Veski tn 69","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Veski tn 69","Name":"Tartu Women’s Shelter"},"geometry":{"type":"Point","coordinates":[26.711556671000917,58.376913094415038]}},{"type":"Feature","properties":{"fid":"32","ads_lahiaa":"Riia tn 2","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Riia tn 2","Name":"Meliva"},"geometry":{"type":"Point","coordinates":[26.728897747915095,58.376932609365895]}},{"type":"Feature","properties":{"fid":"34","ads_lahiaa":"L. Puusepa tn 3","type_tt":"Counselling and psychotherapy centres and clinics","Address":"L. Puusepa tn 3","Name":"OÜ Jaanson & Lääne"},"geometry":{"type":"Point","coordinates":[26.702835559930243,58.368692950872614]}},{"type":"Feature","properties":{"fid":"35","ads_lahiaa":"Lembitu tn 1e","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Lembitu tn 1e","Name":"Family practice in Tartu"},"geometry":{"type":"Point","coordinates":[26.707603622475528,58.369993448928966]}},{"type":"Feature","properties":{"fid":"36","ads_lahiaa":"Ülikooli tn 3","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Ülikooli tn 3","Name":"Phoenix Consultations"},"geometry":{"type":"Point","coordinates":[26.722644539357461,58.379209381780484]}},{"type":"Feature","properties":{"fid":"37","ads_lahiaa":"Võru tn 3","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Võru tn 3","Name":"In Juventus"},"geometry":{"type":"Point","coordinates":[26.721292201283983,58.371166410732734]}},{"type":"Feature","properties":{"fid":"39","ads_lahiaa":"Mõisavahe tn 34c","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Mõisavahe tn 34c","Name":"Katriito mental health clinics"},"geometry":{"type":"Point","coordinates":[26.779732024613629,58.371655164461231]}},{"type":"Feature","properties":{"fid":"40","ads_lahiaa":"Ülikooli tn 10","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Ülikooli tn 10","Name":"Tartu Toome Center"},"geometry":{"type":"Point","coordinates":[26.72230570570456,58.378981827734215]}},{"type":"Feature","properties":{"fid":"41","ads_lahiaa":"Lai tn 28","type_tt":"Counselling and psychotherapy centres and clinics","Address":"Lai tn 28","Name":"Ambromed Clinic"},"geometry":{"type":"Point","coordinates":[26.718848344288947,58.383490037778238]}}]}	
 
 
+	var json_EMO_GeoJSON = 
+	{"type":"FeatureCollection","name":"EMO","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Emergency care unit/Erakorralise meditsiini osakond(EMO)", "Address": "L. Puusepa tn 8, wing M, first floor"},"geometry":{"type":"Point","coordinates":[26.70195601793721, 58.36901859353862]}}]};
+
+
+	const json_emergence_dentalCare_GeoJSON = 
+	{"type":"FeatureCollection","name":"emergence_dental","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Dental Hambaravi OÜ", "Address":"Turu tn 3-19"},"geometry":{"type":"Point","coordinates":[26.730227044683019,58.376298222423628]}}]};
 
 	// Define layers with actual GeoJSON data
 	
@@ -746,7 +1005,7 @@
     var AparaaditehasCulturalCenterLayer = L.geoJson(json_apachtureaparctule_1, {
 	  pointToLayer: function (feature, latlng) {
 		var awesomeMarker = L.AwesomeMarkers.icon({
-		  icon: 'handshake', markerColor: 'darkpurple', prefix: 'fa', iconColor: 'white'
+		  icon: 'people-group', markerColor: 'darkpurple', prefix: 'fa', iconColor: 'white'
 		});
 		return L.marker(latlng, { icon: awesomeMarker })
 		  .bindPopup(`<b>${feature.properties.name}</b>`);
@@ -765,10 +1024,61 @@
     });
 	
 	
+	
+		var apolloCinemaLayer = L.geoJson(json_apollo_cinema_0_GeoJSON, {
+      pointToLayer: function (feature, latlng) {
+        var awesomeMarker = L.AwesomeMarkers.icon({
+          icon: 'fa-film', markerColor: 'green', prefix: 'fa', iconColor: 'white'
+        });
+        return L.marker(latlng, { icon: awesomeMarker })
+          .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
+      }
+    });
+	
+	
+	
+	
+		var tartuElektriteaterLayer = L.geoJson(json_Tartu_Elektriteater_GeoJSON, {
+      pointToLayer: function (feature, latlng) {
+        var awesomeMarker = L.AwesomeMarkers.icon({
+          icon: 'fa-masks-theater', markerColor: 'blue', prefix: 'fa', iconColor: 'white'
+        });
+        return L.marker(latlng, { icon: awesomeMarker })
+          .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
+      }
+    });
+	
+
+		var pallasGalleryLayer = L.geoJson(json_Pallas_Gallery_Exhibitions_GeoJSON, {
+      pointToLayer: function (feature, latlng) {
+        var awesomeMarker = L.AwesomeMarkers.icon({
+          icon: 'fa-studiovinari', markerColor: 'orange', prefix: 'fa', iconColor: 'white'
+        });
+        return L.marker(latlng, { icon: awesomeMarker })
+          .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
+      }
+    });
+
+
+	
+	
+		var artUnionLayer = L.geoJson(json_Kunstmaja_GeoJSON, {
+      pointToLayer: function (feature, latlng) {
+        var awesomeMarker = L.AwesomeMarkers.icon({
+          icon: 'fa-palette', markerColor: 'red', prefix: 'fa', iconColor: 'white'
+        });
+        return L.marker(latlng, { icon: awesomeMarker })
+          .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
+      }
+    });
+	
+
+	
+	
 		var utCounsellingCentreLayer = L.geoJson(json_ut_counselling_centerut_counselling_0, {
 		  pointToLayer: function (feature, latlng) {
 			var awesomeMarker = L.AwesomeMarkers.icon({
-			  icon: 'circle-info', markerColor: 'lightblue', prefix: 'fa', iconColor: 'white'
+			  icon: 'circle-info', markerColor: 'green', prefix: 'fa', iconColor: 'white'
 			});
 
 			return L.marker(latlng, { icon: awesomeMarker })
@@ -793,7 +1103,7 @@
 	    var privateCounsellingLayer = L.geoJson(private_counsellingsGeoJSON, {
 	  pointToLayer: function (feature, latlng) {
 		var awesomeMarker = L.AwesomeMarkers.icon({
-		  icon: 'users', markerColor: 'orange', prefix: 'fa', iconColor: 'white'
+		  icon: 'hospital', markerColor: 'orange', prefix: 'fa', iconColor: 'white'
 		});
 		return L.marker(latlng, { icon: awesomeMarker })
 		  .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
@@ -801,6 +1111,29 @@
 	});
 
 
+
+	    var EMO_GeoJSONLayer = L.geoJson(json_EMO_GeoJSON, {
+	  pointToLayer: function (feature, latlng) {
+		var awesomeMarker = L.AwesomeMarkers.icon({
+		  icon: 'truck-medical', markerColor: 'purple', prefix: 'fa', iconColor: 'white'
+		});
+		return L.marker(latlng, { icon: awesomeMarker })
+		  .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
+	  }
+	});
+
+
+
+
+	    var emergence_dentalLayer = L.geoJson(json_emergence_dentalCare_GeoJSON, {
+	  pointToLayer: function (feature, latlng) {
+		var awesomeMarker = L.AwesomeMarkers.icon({
+		  icon: 'tooth', markerColor: 'blue', prefix: 'fa', iconColor: 'white'
+		});
+		return L.marker(latlng, { icon: awesomeMarker })
+		  .bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address}`);
+	  }
+	});
 
 
 
