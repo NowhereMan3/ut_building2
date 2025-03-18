@@ -469,6 +469,14 @@
 					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
 				<span style="margin-left: 5px;">  Tartu Welcome Centre</span>
 			</div>
+			
+			<div class="legend-item">
+				<i class="fa fa-camera" style="color: white; background: purple; width: 24px; height: 24px; 
+					border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14px;"></i>
+				<span style="margin-left: 5px;">  Tartu Information Centre</span>
+			</div>			
+			
+			
 
 			<div class="legend-item">
 				<div class="legend-color park"></div>
@@ -587,6 +595,8 @@
 	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Tartu Welcome Centre", "Address":"Ülikooli tn 17"},"geometry":{"type":"Point","coordinates":[26.720760262251979,58.381324907733401]}}]};
 
 
+	var json_Information__Tartu_GeoJSON = {"type":"FeatureCollection","name":"tartuWelcomeCentre_0","crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},"features":
+	[{"type":"Feature","properties":{"fid":"2","id":"2","Name":"Tartu Information Centre", "Address":"Raekoja plats 1a, Town Hall"},"geometry":{"type":"Point","coordinates":[26.722157651022336, 58.38022124038451]}}]};
 
 
 
@@ -720,7 +730,19 @@
 	tartuWelcomeCentreLayer.addTo(map);
 
 
-
+	const tartuInformationCentreLayer = L.geoJson(json_Information__Tartu_GeoJSON, { 
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {
+				icon: L.AwesomeMarkers.icon({
+					icon: 'camera',  // FontAwesome info icon
+					markerColor: 'purple', // Red marker for welcome centre
+					prefix: 'fa',
+					iconColor: 'white'
+				})
+			}).bindPopup(`<b>${feature.properties.Name}</b><br>${feature.properties.Address || 'No address available'}`);
+		}
+	});  
+	tartuInformationCentreLayer.addTo(map);
 
 
 
